@@ -1,0 +1,180 @@
+/* Reference: a folded before / after picture. */
+.ls-ref { margin: 2px 0 4px 0; }
+.ls-ref > summary {
+    list-style: none;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    min-width: fit-content !important;
+    padding: 0 12px !important;
+    border-radius: 8px;
+    border: 1px solid var(--border-color-primary, rgba(128, 128, 128, 0.35));
+    background: var(--button-secondary-background-fill, transparent) !important;
+    color: var(--button-secondary-text-color, var(--body-text-color, inherit));
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+}
+.ls-ref > summary::-webkit-details-marker { display: none; }
+.ls-ref > summary::marker { content: ""; }
+.ls-ref > summary:hover { border-color: var(--color-accent, #7aa2ff); }
+.ls-ref > summary svg { width: 18px; height: 18px; flex: none; }
+.ls-ref .ls-ref-hide { display: none; }
+.ls-ref[open] .ls-ref-show { display: none; }
+.ls-ref[open] .ls-ref-hide { display: inline; }
+.ls-ref-body {
+    margin-top: 8px;
+    max-height: 560px;
+    overflow: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-color-primary, rgba(128, 128, 128, 0.35));
+    background: #18191c;
+}
+.ls-ref-body a { display: block; line-height: 0; }
+.ls-ref-body img {
+    display: block;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    cursor: zoom-in;
+}
+.ls-ref-hint { margin-top: 4px; font-size: var(--text-xs, 11px); opacity: 0.7; }
+
+
+/* Preset carousel: category chips over a scrolling row of icon cards. */
+.ls-car { margin: 2px 0 6px 0; }
+.ls-chips {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center;
+    gap: 8px 6px !important;
+    margin: 0 0 10px 0 !important;
+    padding: 0 !important;
+}
+/* Every box property is pinned: UI themes (Lobe Theme and the like) reset
+   button padding, borders and fonts. */
+.ls-chip {
+    box-sizing: border-box !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 26px !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 12px !important;
+    border: 1px solid var(--border-color-primary, rgba(128, 128, 128, 0.35)) !important;
+    border-radius: 13px !important;
+    background: transparent !important;
+    color: var(--body-text-color, inherit) !important;
+    font: 500 12px/1 var(--font, inherit) !important;
+    letter-spacing: 0.2px;
+    white-space: nowrap !important;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity 0.12s, border-color 0.12s, background 0.12s;
+}
+.ls-chip:hover { opacity: 1; border-color: var(--color-accent, #7aa2ff) !important; }
+.ls-chip.ls-on {
+    opacity: 1;
+    background: var(--color-accent, #7aa2ff) !important;
+    border-color: var(--color-accent, #7aa2ff) !important;
+    color: #fff !important;
+}
+.ls-row { display: flex !important; align-items: center !important; gap: 6px !important; }
+.ls-nav {
+    box-sizing: border-box !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    flex: none !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    border: 1px solid var(--border-color-primary, rgba(128, 128, 128, 0.35)) !important;
+    background: var(--button-secondary-background-fill, transparent) !important;
+    color: var(--body-text-color, inherit) !important;
+    font-size: 20px !important;
+    line-height: 24px !important;
+    cursor: pointer !important;
+}
+.ls-nav:hover { border-color: var(--color-accent, #7aa2ff) !important; }
+.ls-track {
+    flex: 1 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    gap: 10px !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    padding: 3px 2px 6px 2px !important;
+}
+.ls-card {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    flex: none !important;
+    width: 116px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 5px 4px 6px 4px !important;
+    border-radius: 12px !important;
+    border: 1px solid transparent !important;
+    background: transparent !important;
+    color: var(--body-text-color, inherit) !important;
+    cursor: pointer !important;
+    scroll-snap-align: start;
+}
+.ls-card[hidden] { display: none !important; }
+.ls-card:hover { border-color: var(--border-color-primary, rgba(128, 128, 128, 0.35)) !important; }
+.ls-card.ls-on {
+    border-color: var(--color-accent, #7aa2ff) !important;
+    background: var(--background-fill-secondary, rgba(128, 128, 128, 0.12)) !important;
+}
+.ls-icon {
+    display: block !important;
+    flex: none;
+    width: 100px !important;
+    height: 100px !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 12px;
+    object-fit: cover;
+    background-color: #18191c;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+.ls-card.ls-on .ls-icon { box-shadow: 0 0 0 2px var(--color-accent, #7aa2ff); }
+.ls-letters {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    color: #f5f3ee;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.ls-name {
+    width: 100% !important;
+    font-size: 12px !important;
+    line-height: 15px !important;
+    text-align: center !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+}
+/* The textbox the carousel writes to: in the page, never on screen. */
+.ls-pick { display: none !important; }
+
+/* One-line guide at the top. */
+.ls-guide { margin: 0 0 6px 0 !important; opacity: 0.75; font-size: 13px; }
+.ls-guide p { margin: 0 !important; }
+.ls-section { margin: 10px 0 -4px 0 !important; opacity: 0.85; }
+.ls-section p { margin: 0 !important; }
