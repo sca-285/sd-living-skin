@@ -16,7 +16,7 @@ EXTENSION_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if EXTENSION_ROOT not in sys.path:
     sys.path.insert(0, EXTENSION_ROOT)
 
-from lib_ls import masks, xyz  # noqa: E402
+from lib_ls import gpu, masks, xyz  # noqa: E402
 from lib_ls.carousel import carousel_html, parse_pick  # noqa: E402
 from lib_ls.controls import (  # noqa: E402
     BY_NAME, INFOTEXT_KEY, NAMES, coerce, from_infotext, settings, to_infotext,
@@ -166,16 +166,20 @@ class Script(scripts.Script):
         if s["strength"] <= 0:
             return
         try:
-            device = devices.device
             image = pp.image.convert("RGB")
-            maps = masks.skin_maps(image, device, tolerance=s["tolerance"], delicate=s["delicate"])
-            print(f"[Living Skin] {maps['faces']} face(s), skin {maps['skin'].mean():.0%} of the frame "
-                  f"(colour from {maps['source']})")
-            x = torch.from_numpy(np.asarray(image).astype(np.float32) / 255.0).permute(2, 0, 1)[None].to(device)
-            t = lambda a: torch.from_numpy(a)[None, None].to(device)  # noqa: E731
-            with torch.no_grad():
-                y = retouch(x, t(maps["skin"]), t(maps["delicate"]), t(maps["features"]), s,
-                            seed=_image_seed(p, image), scale=maps["scale"])
+            # The retouch keeps about 40 float copies of the picture in flight,
+            # plus the three facexlib models (~600 MB with activations). On the
+            # GPU only if it has room (Forge is asked to unload first), else the CPU.
+            device = gpu.pick(devices.device, gpu.image_need(image, 40) + 600 * gpu.MB, "Living Skin")
+            with gpu.Timer("Living Skin", device):
+                maps = masks.skin_maps(image, device, tolerance=s["tolerance"], delicate=s["delicate"])
+                print(f"[Living Skin] {maps['faces']} face(s), skin {maps['skin'].mean():.0%} of the frame "
+                      f"(colour from {maps['source']})")
+                x = torch.from_numpy(np.asarray(image).astype(np.float32) / 255.0).permute(2, 0, 1)[None].to(device)
+                t = lambda a: torch.from_numpy(a)[None, None].to(device)  # noqa: E731
+                with torch.no_grad():
+                    y = retouch(x, t(maps["skin"]), t(maps["delicate"]), t(maps["features"]), s,
+                                seed=_image_seed(p, image), scale=maps["scale"])
             out = Image.fromarray((y[0].permute(1, 2, 0).float().cpu().numpy() * 255.0).round()
                                   .clip(0, 255).astype(np.uint8))
         except Exception as exc:

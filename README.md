@@ -51,6 +51,15 @@ This order is a suggestion, not a requirement. You can use Living Skin on its ow
 - The X/Y/Z plot axes are grouped under `[LS]`: Preset, Overall strength, Even skin, Even colour, Soften lines, Pores, Add texture, Natural pigmentation, Glow, Brows & lashes and Skin match. A plot cell that sets one of these values enables the retouch for that cell.
 - Added texture and pigmentation follow the image seed, so they can be reproduced with the same seed and settings.
 
+## VRAM
+
+Before it touches the GPU, the extension checks how much VRAM is really free.
+If Forge has filled it with the checkpoint (large models, low-VRAM mode), Forge
+is asked to unload models first, as it does itself before the VAE; if there is
+still not enough room, the retouch runs on the CPU. On Windows this avoids the
+driver spilling into system RAM, where post-processing slows to a crawl and
+seems stuck at 99-100 %. The console says where it ran and how long it took.
+
 ## Credits and licence
 
 - [facexlib](https://github.com/xinntao/facexlib) (MIT) provides face detection, face parsing and person matting. Model notices are listed in `NOTICE.md`.
